@@ -73,19 +73,15 @@ public class AppTest {
         Context context = getInstrumentation().getTargetContext();
         SharedPrefStorage pref = new SharedPrefStorage(context);
         pref.resetUser();
-        //Allow user to perform phone call
-        getInstrumentation().getUiAutomation().executeShellCommand(
-                "pm grant " + getTargetContext().getPackageName()
-                        + " android.permission.CALL_PHONE");
-
-        userdata=UserCredentials.getuserdata();
-        System.out.println(userdata);
+        
 
     }
 
 
     @Test
     public void test1VerifyLoginToApp() throws InterruptedException {
+        userdata=UserCredentials.getuserdata();
+        System.out.println(userdata);
         Log.i("test1LoginToApp", "###Logging into the App");
     //Sleep Thread for a 1 sec delay app load
         Thread.sleep(1000);
