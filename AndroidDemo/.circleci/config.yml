@@ -1,36 +1,50 @@
-general:
-  artifacts:
-    - "app/build/reports/androidTests/connected"
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
-machine:
-  java:
-    version: oraclejdk8
-  python:
-    version: 2.7.10
-  environment:
-    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-    TEST_FLAGS: "--configure-on-demand -PdisablePreDex"
-    TERM: "dumb"
-    ADB_INSTALL_TIMEOUT: "10"
+    working_directory: ~/repo
 
-dependencies:
-  pre:
-    - if [ ! -e /usr/local/android-sdk-linux/build-tools/25.0.2 ]; then echo y | android update sdk --all --no-ui --filter "build-tools-25.0.2"; fi;
-    - if [ ! -e /usr/local/android-sdk-linux/platforms/android-25 ]; then echo y | android update sdk --all --no-ui --filter "android-25"; fi;
-    - if ! $(grep -q "Revision=44.0.0" /usr/local/android-sdk-linux/extras/android/m2repository/source.properties); then echo y | android update sdk --all --no-ui --filter "extra-android-m2repository"; fi;
-  cache_directories:
-    - /usr/local/android-sdk-linux/build-tools/25.0.2
-    - /usr/local/android-sdk-linux/platforms/android-25
-    - /usr/local/android-sdk-linux/extras/android/m2repository
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    
+    steps:
+      - checkout
 
-test:
-  override:
-    - ./gradlew assembleDebug -PdisablePreDex
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
-deployment:
-  espresso:
-    branch: master
-    commands:
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+        
+      # run tests!
+      - run: gradle test
+	  
+	deployment:
+		espresso:
+		branch: master
+		commands:
       - emulator -avd circleci-android22 -no-audio -no-window:
           background: true
           parallel: true
