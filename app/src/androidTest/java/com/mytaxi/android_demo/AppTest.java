@@ -75,7 +75,7 @@ public class AppTest {
         pref.resetUser();
         //Allow user to perform phone call
 
-       
+
 
     }
 
@@ -83,8 +83,13 @@ public class AppTest {
     @Test
     public void test1VerifyLoginToApp() throws Exception {
         Log.i("test1LoginToApp", "###Logging into the App");
-        userdata=UserCredentials.getuserdata();
-        System.out.println(userdata);
+        try {
+            userdata = UserCredentials.getuserdata();
+            System.out.println(userdata);
+        }
+        catch(Exception e){
+            System.out.println("Error"+ e);
+        }
     //Sleep Thread for a 1 sec delay app load
         Thread.sleep(1000);
         // Type username
