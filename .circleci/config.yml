@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/android:api-23-ndk-r17b
+      - image: circleci/android@sha256:506c7e046a4c50a0d4e321bcf85d8c406afe2e756bd0e796a5d986dcf8f42894
     environment:
       JVM_OPTS: -Xmx4200m
     steps:
