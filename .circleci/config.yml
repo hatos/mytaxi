@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/android:api-26-ndk-r17b
+      - image: circleci/android@sha256:d0be09151e34c2da379b9a49b9e02f7acedc9cdfb09184413d965ee6ab68e33f
     environment:
       TERM: dumb
       _JAVA_OPTIONS: "-Xmx2048m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
