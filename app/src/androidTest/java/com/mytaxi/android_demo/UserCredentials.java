@@ -41,7 +41,7 @@ public class UserCredentials {
 
         JSONArray results=myResponse.getJSONArray("results");
         Map<String,String> usercredentials=new HashMap<String,String>();
-for(int i=0;i<results.length();i++)
+for(int i=0;i<1;i++)
 {
     JSONObject resultElemets=new JSONObject(results.get(i).toString());
     JSONObject login=resultElemets.getJSONObject("login");
